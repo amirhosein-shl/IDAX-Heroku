@@ -1,7 +1,7 @@
 import subprocess
 
 # Install required packages
-subprocess.call(['pip', 'install', '-r', 'requirements.txt'])
+# subprocess.call(['pip', 'install', '-r', 'requirements.txt'])
 
 import pandas as pd
 import numpy as np
