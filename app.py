@@ -310,10 +310,10 @@ def IDAX(count, TMV, time):
 
 
 #### Start of the routes.py
-from app import app
 from flask import render_template, request, redirect, url_for
+from flask import Flask
 # from IDAX_to_TMV_py import IDAX
-
+app = Flask(__name__)
 
 
 @app.route('/')
@@ -336,3 +336,6 @@ def process():
 
     # return render_template('result.html', result=result)
 
+
+if __name__ == "__main__":
+    app.run(debug=True)
