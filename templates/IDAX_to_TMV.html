@@ -21,7 +21,7 @@
             .catch(error => console.error('Error fetching CSRF token:', error));
     };
     </script>
-    <form action="https://amirshl96.pythonanywhere.com/submit" method="POST">
+    <form action="/submit" method="POST">
         <input type="hidden" name="csrf_token" id="csrf_token">
         <label for="input3">Time of Day:</label>
         <input type="text" id="input3" name="input3"><br>
