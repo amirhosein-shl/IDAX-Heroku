@@ -6,72 +6,73 @@
     <script src="script.js"></script>
 </head>
 <body>
+    <div class="title-panel">
+        <img src="Transpo Logo_Web_300.png" class="top-right" style="max-height:50px; max-width:286px;">
+    </div>
+<body>
     <h1>IDAX Counts into TMV</h1>
-
-    <form action="/submit" method="POST">
-        <label for="Input1">Count Location:</label>
-        <input type="text" id="input1" name="input1"><br>
-
-        <label for="input2">TMV Directory:</label>
-        <input type="text" id="input2" name="input2"><br>
-
+    <script>
+    window.onload = function() {
+        fetch('https://yourusername.pythonanywhere.com/get-csrf-token')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("csrf_token").value = data.csrf_token;
+            })
+            .catch(error => console.error('Error fetching CSRF token:', error));
+    };
+    </script>
+    <form action="https://amirshl96.pythonanywhere.com/submit" method="POST">
+        <input type="hidden" name="csrf_token" id="csrf_token">
         <label for="input3">Time of Day:</label>
         <input type="text" id="input3" name="input3"><br>
+
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div id="drop_zone" style="border: 2px dashed #ccc; padding: 20px; text-align: center;">
+                    Drag and drop a ZIP file containing PDFs and Excel files.
+                    <input type="file" id="input1" accept=".zip" style="width: 100%;" multiple="false">
+                </div>
+                
+                <script>
+                    const dropZone = document.getElementById('drop_zone');
+                    const fileInput = document.getElementById('file_upload');
+                
+                    dropZone.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        dropZone.style.border = '2px dashed #007BFF';
+                    });
+                
+                    dropZone.addEventListener('dragleave', () => {
+                        dropZone.style.border = '2px dashed #ccc';
+                    });
+                
+                    dropZone.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        dropZone.style.border = '2px dashed #ccc';
+                
+                        const files = e.dataTransfer.files;
+                        fileInput.files = files;
+                
+                        // You can now handle the uploaded ZIP file in JavaScript
+                        // Extract the ZIP file and process its contents
+                        processZipFile(fileInput.files[0]);
+                    });
+                </script>
+
+                <div id="drop_zone" style="border: 2px dashed #ccc; padding: 20px; text-align: center;">
+                    Drag and drop the TMV file.
+                    <input type="file" id="input2" accept=".xlsx" style="width: 100%;" multiple="FALSE">
+                </div>
+                
+                <button id="download_btn">Download Uploaded File</button>
+                <div id="file_info"></div>
+            </div>
+        </div>
+    </div>
 
         <input type="submit" value="Run">
     </form>
 </body>
 </html>
 
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Transpo Group - Synchro/Sidra Report Interpreter</title>
-    <script src="enter_button.js"></script>
-    <!-- Add links to CSS files or other JS libraries as needed -->
-</head>
-<body>
-    <div class="title-panel">
-        <img src="C:\Users\amirs\Desktop\Template\IDAX_Uploader\app\templates\Transpo Logo_Web_300.png" style="max-height:50px; max-width:286px;">
-    </div>
-
-    <div class="sidebar-layout">
-        <div class="sidebar-panel">
-            <div style="height: 50px; justify-content: center; align-items: center;">
-                <!-- Content here -->
-            </div>
-            <form>
-
-                <!-- Checkboxes -->
-                <label>Choose time periods that apply:</label><br>
-                <input type="checkbox" id="am" name="timePeriod" value="AM">
-                <label for="am">AM Peak Hour</label><br>
-                <input type="checkbox" id="pm" name="timePeriod" value="PM" checked>
-                <label for="pm">PM Peak Hour</label><br>
-                <input type="checkbox" id="md" name="timePeriod" value="MD" checked>
-                <label for="md">PM Peak Hour</label><br>
-
-                
-
-                <!-- Numeric input -->
-                <label for="yearChoices">For future what years are included?</label>
-                <input type="number" id="yearChoices" name="year" min="2000" max="2100" value="2026"><br>
-
-                <input type="button" id="goButton" value="Go!">
-
-        </div>
-
-        <div class="main-panel">
-            <div id="Input1" style="border: 2px dashed #ccc; padding: 20px; text-align: center;">
-                Count Location:
-                <input type="file" id="Input1" accept=".pdf">
-
-            <div id="input2" style="border: 2px dashed #ccc; padding: 20px; text-align: center;">
-                TMV Directory:
-                <input type="file" id="input2" accept=".pdf">
-            </div>
-        </div>
-    </div>
-</body>
-</html>
