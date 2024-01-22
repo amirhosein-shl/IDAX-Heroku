@@ -312,13 +312,24 @@ def IDAX(count, TMV, time):
 #### Start of the routes.py
 from flask import render_template, request, redirect, url_for
 from flask import Flask
+from flask_wtf import FlaskForm
+from wtforms import FileField, SubmitField
+from werkzeug.utils import secure_filename
+import os
+from wtforms.validators import InputRequired
 # from IDAX_to_TMV_py import IDAX
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'supersecretkey'
+app.config['UPLOAD_FOLDER'] = 'static/files'
 
-
-@app.route('/')
+@app.route('/', methods=['GET',"POST"])
 def index():
-    return render_template('IDAX_to_TMV.html')
+    form = UploadFileForm()
+    if form.validate_on_submit():
+        file = form.file.data # First grab the file
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
+        return "File has been uploaded."
+    return render_template('IDAX_to_TMV.html', form=form)
 
 
 @app.route('/submit', methods=['POST'])
