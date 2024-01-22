@@ -322,20 +322,32 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'supersecretkey'
 app.config['UPLOAD_FOLDER'] = 'static/files'
 
+class UploadFileForm(FlaskForm):
+    file = FileField("File", validators=[InputRequired()])
+    submit = SubmitField("Upload File")
+
 @app.route('/', methods=['GET',"POST"])
 def index():
     form = UploadFileForm()
     if form.validate_on_submit():
         file = form.file.data # First grab the file
+        global input1
+        input1 = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))
         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
-        return "File has been uploaded."
+        return "Counts zipfile has been uploaded."
+
+    form1 = UploadFileForm()
+    if form1.validate_on_submit():
+        file = form.file.data # First grab the file
+        global input2
+        input2 = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))
+        file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
+        return "TMV has been uploaded."
     return render_template('IDAX_to_TMV.html', form=form)
 
 
 @app.route('/submit', methods=['POST'])
 def process():
-    input1 = request.form['input1']
-    input2 = request.form['input2']
     input3 = request.form['input3']
 
 
