@@ -327,7 +327,35 @@ class UploadFileForm(FlaskForm):
     file = FileField("File", validators=[InputRequired()])
     submit = SubmitField("Upload File")
 
-@app.route('/', methods=['GET',"POST"])
+
+
+@app.route('/upload_zip', methods=['POST'])
+def upload_zip():
+    form = UploadFileForm()
+    if form.validate_on_submit():
+        zip_file = form.zip_file.data
+        zip_filename = secure_filename(zip_file.filename)
+        zip_save_path = os.path.join(app.config['UPLOAD_FOLDER'], zip_filename)
+        zip_file.save(zip_save_path)
+
+        with zipfile.ZipFile(save_path, 'r') as zip_ref:
+            extract_path = os.path.join(app.config['UPLOAD_FOLDER'], 'unzipped')
+            zip_ref.extractall(extract_path)
+
+        app.config['ZIP_FOLDER'] = zip_save_path 
+    return redirect(url_for('index'))
+
+@app.route('/upload_excel', methods=['POST'])
+def upload_excel():
+    form = UploadFileForm()
+    if form.validate_on_submit():
+        excel_file = form.excel_file.data
+        excel_filename = secure_filename(excel_file.filename)
+        excel_save_path = os.path.join(app.config['UPLOAD_FOLDER'], excel_filename)
+        excel_file.save(excel_save_path)
+        app.config['EXCEL_FILE'] = excel_save_path 
+    return redirect(url_for('index'))
+        
 def index():
     form = UploadFileForm()
     if form.validate_on_submit():
@@ -355,19 +383,37 @@ def index():
     return render_template('IDAX_to_TMV.html', form=form)
 
 
-@app.route('/submit', methods=['POST'])
+@app.route('/process', methods=['POST'])
 def process():
+    zip_folder = app.config.get('ZIP_FOLDER')
+    excel_file = app.config.get('EXCEL_FILE')
     input3 = request.form['input3']
 
-    input1 = app.config['EXTRACTED_FOLDER']
-
     # Run your Python script using the data
-    IDAX(count=input1, TMV=input2, time=input3)
+    IDAX(count=zip_folder, TMV=excel_file, time=input3)
+    app.config['PROCESSED_EXCEL'] = 'processed_excel.xlsx'
+    return render_template('IDAX_to_TMV.html', download_link_visible=True)
 
-    print('got end of the submit file')
 
-    # return render_template('result.html', result=result)
+@app.route('/download')
+def download():
+    processed_excel_path = app.config.get('PROCESSED_EXCEL')
+    directory = os.path.dirname(processed_excel_path)
+    filename = os.path.basename(processed_excel_path)
 
+    # Send the file to user
+    response = send_from_directory(directory, filename, as_attachment=True)
+
+    # After sending the file, delete the uploaded and processed files
+    try:
+        os.remove(processed_excel_path)
+        os.remove(app.config.get('ZIP_FOLDER'))
+        os.remove(app.config.get('EXCEL_FILE'))
+        # Also, delete any other temporary files or directories you created
+    except Exception as e:
+        app.logger.error(f"Error deleting files: {e}")
+
+    return response
 
 if __name__ == "__main__":
     app.run()
