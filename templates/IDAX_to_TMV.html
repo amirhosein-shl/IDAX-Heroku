@@ -11,60 +11,29 @@
     </div>
     <h1>IDAX Counts into TMV</h1>
     
-    <form action="/submit" method="POST">
-        <input type="hidden" name="csrf_token" id="csrf_token">
-        <label for="input3">Time of Day:</label>
-        <input type="text" id="input3" name="input3"><br>
-
-        <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-8">
-                <div id="drop_zone" style="border: 2px dashed #ccc; padding: 20px; text-align: center;">
-                    Drag and drop a ZIP file containing PDFs and Excel files.
-                    <input type="file" id="input1" accept=".zip" style="width: 100%;" multiple="false">
-                </div>
-                
-                <script>
-                    const dropZone = document.getElementById('drop_zone');
-                    const fileInput = document.getElementById('file_upload');
-                
-                    dropZone.addEventListener('dragover', (e) => {
-                        e.preventDefault();
-                        dropZone.style.border = '2px dashed #007BFF';
-                    });
-                
-                    dropZone.addEventListener('dragleave', () => {
-                        dropZone.style.border = '2px dashed #ccc';
-                    });
-                
-                    dropZone.addEventListener('drop', (e) => {
-                        e.preventDefault();
-                        dropZone.style.border = '2px dashed #ccc';
-                
-                        const files = e.dataTransfer.files;
-                        fileInput.files = files;
-                
-                        // You can now handle the uploaded ZIP file in JavaScript
-                        // Extract the ZIP file and process its contents
-                        processZipFile(fileInput.files[0]);
-                    });
-                </script>
-
-    <form method='POST' enctype='multipart/form-data'>
+    <!-- Form for Zip File -->
+    <form method='POST' action='/upload_zip' enctype='multipart/form-data'>
         {{form.hidden_tag()}}
-        {{ form.file.label(class="Upload the TMV Spreadsheet:") }}
-        {{form.file()}}
-        {{form.submit()}}
+        {{ form.zip_file.label(class="Upload the Count's Zipfile:") }}
+        {{form.zip_file()}}
+        {{form.submit_zip()}}
     </form>
-            
-                <button id="download_btn">Download Uploaded File</button>
-                <div id="file_info"></div>
-            </div>
-        </div>
-    </div>
-
+    
+    <!-- Form for Excel File -->
+    <form method='POST' action='/upload_excel' enctype='multipart/form-data'>
+        {{form.hidden_tag()}}
+        {{ form.excel_file.label(class="Upload the TMV Spreadsheet:") }}
+        {{form.excel_file()}}
+        {{form.submit_excel()}}
+    </form>
+    
+    <!-- Button to Trigger Processing -->
+    <form method='POST' action='/process'>
         <input type="submit" value="Run">
     </form>
+    
+    <!-- Download Link (will be visible after processing) -->
+    <a href="/download" id="download_link" style="display:none;">Download Processed Excel File</a>
 </body>
 </html>
 
