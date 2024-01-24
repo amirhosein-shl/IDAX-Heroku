@@ -346,7 +346,7 @@ def upload_zip():
         zip_save_path = os.path.join(app.config['UPLOAD_FOLDER'], zip_filename)
         zip_file.save(zip_save_path)
 
-        with zipfile.ZipFile(save_path, 'r') as zip_ref:
+        with zipfile.ZipFile(zip_save_path, 'r') as zip_ref:
             extract_path = os.path.join(app.config['UPLOAD_FOLDER'], 'unzipped')
             zip_ref.extractall(extract_path)
 
