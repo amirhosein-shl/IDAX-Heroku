@@ -326,6 +326,9 @@ app.config['UPLOAD_FOLDER'] = 'static/files'
 
 class UploadFileForm(FlaskForm):
     zip_file = FileField('Upload Zip File', validators=[DataRequired()])
+    excel_file = FileField('Upload Excel File', validators=[DataRequired()])
+    submit_zip = SubmitField('Upload Zip')
+    submit_excel = SubmitField('Upload Excel')
     file = FileField("File", validators=[InputRequired()])
     submit = SubmitField("Upload File")
 
