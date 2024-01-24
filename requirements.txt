@@ -14,3 +14,5 @@ openpyxl
 PyPDF2
 # Flask==2.1.2
 Flask
+
+Flask-WTF==0.14.3
