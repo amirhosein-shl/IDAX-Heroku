@@ -324,6 +324,7 @@ app.config['SECRET_KEY'] = 'supersecretkey'
 app.config['UPLOAD_FOLDER'] = 'static/files'
 
 class UploadFileForm(FlaskForm):
+    zip_file = FileField('Upload Zip File', validators=[DataRequired()])
     file = FileField("File", validators=[InputRequired()])
     submit = SubmitField("Upload File")
 
