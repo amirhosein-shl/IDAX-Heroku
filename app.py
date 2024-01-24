@@ -329,7 +329,8 @@ class UploadFileForm(FlaskForm):
 
 @app.route('/')
 def index():
-    return render_template('IDAX_to_TMV.html')
+    form = UploadFileForm()  
+    return render_template('IDAX_to_TMV.html', form=form)
 
 @app.route('/upload_zip', methods=['POST'])
 def upload_zip():
