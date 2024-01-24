@@ -337,6 +337,8 @@ def index():
     form = UploadFileForm()  
     return render_template('IDAX_to_TMV.html', form=form)
 
+from flask import flash
+
 @app.route('/upload_zip', methods=['POST'])
 def upload_zip():
     form = UploadFileForm()
@@ -350,7 +352,8 @@ def upload_zip():
             extract_path = os.path.join(app.config['UPLOAD_FOLDER'], 'unzipped')
             zip_ref.extractall(extract_path)
 
-        app.config['ZIP_FOLDER'] = zip_save_path 
+        app.config['ZIP_FOLDER'] = zip_save_path
+        flash('File successfully uploaded', 'success')
     return redirect(url_for('index'))
 
 @app.route('/upload_excel', methods=['POST'])
@@ -363,6 +366,7 @@ def upload_excel():
         excel_file.save(excel_save_path)
         app.logger.info(f"Excel file saved at {excel_save_path}")
         app.config['EXCEL_FILE'] = excel_save_path 
+        flash('File successfully uploaded', 'success')
     return redirect(url_for('index'))
 
 @app.route('/process', methods=['POST'])
