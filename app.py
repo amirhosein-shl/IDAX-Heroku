@@ -327,7 +327,9 @@ class UploadFileForm(FlaskForm):
     file = FileField("File", validators=[InputRequired()])
     submit = SubmitField("Upload File")
 
-
+@app.route('/')
+def index():
+    return render_template('your_template.html')
 
 @app.route('/upload_zip', methods=['POST'])
 def upload_zip():
@@ -355,33 +357,6 @@ def upload_excel():
         excel_file.save(excel_save_path)
         app.config['EXCEL_FILE'] = excel_save_path 
     return redirect(url_for('index'))
-        
-# def index():
-#     form = UploadFileForm()
-#     if form.validate_on_submit():
-#         file = form.file.data # First grab the file
-#         filename = secure_filename(file.filename)
-#         save_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-#         file.save(save_path)
-#         # global input1
-#         # input1 = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))
-#         # file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
-
-#         with zipfile.ZipFile(save_path, 'r') as zip_ref:
-#             extract_path = os.path.join(app.config['UPLOAD_FOLDER'], 'unzipped')
-#             zip_ref.extractall(extract_path)
-
-#         app.config['EXTRACTED_FOLDER'] = extract_path
-
-#     form1 = UploadFileForm()
-#     if form1.validate_on_submit():
-#         file = form.file.data # First grab the file
-#         global input2
-#         input2 = os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))
-#         file.save(os.path.join(os.path.abspath(os.path.dirname(__file__)),app.config['UPLOAD_FOLDER'],secure_filename(file.filename))) # Then save the file
-#         return "TMV and Counts have been uploaded."
-#     return render_template('IDAX_to_TMV.html', form=form)
-
 
 @app.route('/process', methods=['POST'])
 def process():
