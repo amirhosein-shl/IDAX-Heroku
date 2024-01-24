@@ -361,6 +361,7 @@ def upload_excel():
         excel_filename = secure_filename(excel_file.filename)
         excel_save_path = os.path.join(app.config['UPLOAD_FOLDER'], excel_filename)
         excel_file.save(excel_save_path)
+        app.logger.info(f"Excel file saved at {excel_save_path}")
         app.config['EXCEL_FILE'] = excel_save_path 
     return redirect(url_for('index'))
 
@@ -368,6 +369,7 @@ def upload_excel():
 def process():
     zip_folder = app.config.get('ZIP_FOLDER')
     excel_file = app.config.get('EXCEL_FILE')
+    app.logger.info(f"Processing with ZIP folder: {zip_folder} and Excel file: {excel_file}")
     input3 = request.form['input3']
 
     # Run your Python script using the data
