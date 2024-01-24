@@ -9,6 +9,15 @@
     <div class="title-panel">
         <img src="{{ url_for('static', filename='Transpo Logo_Web_300.png') }}" class="top-right" style="max-height:50px; max-width:286px;">
     </div>
+    
+    <!-- Flash Messages Display -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <h1>IDAX Counts into TMV</h1>
     
     <div class="form-container">
