@@ -6,6 +6,19 @@ body {
     margin: 20px;
 }
 
+.alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
 .upload-form, .process-form {
     margin-bottom: 20px;
     padding: 20px;
